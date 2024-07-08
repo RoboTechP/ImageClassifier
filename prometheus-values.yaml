@@ -1,0 +1,17 @@
+prometheus:
+  prometheusSpec:
+    scrapeInterval: "15s"  # Set global scrape interval to 10 seconds
+    scrapeTimeout: "15s"   # Set global scrape timeout to 30 seconds
+    additionalScrapeConfigs:
+      - job_name: 'dispatcher-service'
+        scrape_interval: 15s  # Set job-specific scrape interval to 10 seconds
+        scrape_timeout: 15s   # Set job-specific scrape timeout to 30 seconds
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: image-classification-server
+        metric_relabel_configs:
+          - source_labels: [__address__]
+            target_label: instance

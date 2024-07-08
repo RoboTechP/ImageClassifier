@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: flask-app-monitor
+  labels:
+    release: prometheus # Adjust this to match your Prometheus operator's labels
+spec:
+  selector:
+    matchLabels:
+      app: image-classification-server
+  endpoints:
+    - port: http # This should match the port name in your Service
+      path: /metrics
+      interval: 5s
+      

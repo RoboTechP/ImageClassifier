@@ -1,0 +1,9 @@
+Flask==3.0.3
+torch==2.0.1+cpu
+torchvision==0.15.2+cpu
+Werkzeug==3.0.3
+Jinja2==3.1.4
+markupsafe==2.1.1
+itsdangerous==2.2.0
+numpy==1.24.2
+prometheus_client==0.20.0
