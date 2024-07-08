@@ -17,7 +17,7 @@ DEPLOYMENT_NAME = "image-classification-deployment"
 NAMESPACE = "default"
 THRESHOLD_UNPROCESSED_PER_POD = 40
 
-# Increase the default socket options
+# Increases the default socket options
 HTTPConnection.default_socket_options = (
     HTTPConnection.default_socket_options + [
         (socket.SOL_SOCKET, socket.SO_SNDBUF, 50000000),  # 50MB send buffer
@@ -25,7 +25,7 @@ HTTPConnection.default_socket_options = (
     ]
 )
 
-# Load Kubernetes configuration
+# Loads Kubernetes configuration
 config.load_kube_config()
 
 def get_session():
@@ -40,7 +40,7 @@ def send_request(session, endpoint, image_path):
     url = endpoint
     files = {'file': open(image_path, 'rb')}
     try:
-        response = session.post(url, files=files, timeout=60)  # Increased timeout to 60 seconds
+        response = session.post(url, files=files, timeout=60)
         response.raise_for_status()
         if response.status_code == 202:
             print("Request accepted and added to queue")
@@ -90,7 +90,7 @@ def get_metric_value(metric_name):
     session = get_session()
     
     try:
-        response = session.get(url, params=params, timeout=30)  # Increased timeout to 30 seconds
+        response = session.get(url, params=params, timeout=30) 
         response.raise_for_status()
         results = response.json()['data']['result']
         if results:
@@ -99,13 +99,6 @@ def get_metric_value(metric_name):
     except requests.exceptions.RequestException as e:
         print(f"Error fetching metric: {e}")
         return 0
-
-def log_resource_usage(deployment_name, namespace):
-    cpu_usage = get_metric_value(f'sum(rate(container_cpu_usage_seconds_total{{namespace="{namespace}", pod=~"{deployment_name}-.*"}}[1m])) by (pod)')
-    memory_usage = get_metric_value(f'sum(container_memory_usage_bytes{{namespace="{namespace}", pod=~"{deployment_name}-.*"}}) by (pod)')
-    
-    print(f"CPU usage for {deployment_name}: {cpu_usage} cores")
-    print(f"Memory usage for {deployment_name}: {memory_usage / (1024 * 1024)} MB")  # Convert bytes to MB
 
 if __name__ == "__main__":
     if not os.path.exists(IMAGE_DIR):
@@ -117,11 +110,7 @@ if __name__ == "__main__":
             print(f"Starting load test with {num_requests} requests (Batch {index + 1})")
             load_test(ENDPOINT, num_requests, IMAGE_DIR, start_index, concurrency_level)
             start_index += num_requests
-            print(f"Completed batch {index + 1}. Moving towards batch {index + 2}...\n")
-            
-            # Log resource usage after each batch
-            log_resource_usage(DEPLOYMENT_NAME, NAMESPACE)
-            
+            print(f"Completed batch {index + 1}. Moving towards batch {index + 2}...\n")    
             time.sleep(1)
 
         print("Load test completed for all batches.")

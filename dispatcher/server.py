@@ -13,7 +13,7 @@ app = Flask(__name__)
 # Prometheus metrics
 TOTAL_RECEIVED_REQUESTS = Counter('http_requests', 'Total number of received HTTP requests', ['endpoint'])
 
-# Wrap your app with the Prometheus WSGI middleware
+# Wraps your app with the Prometheus WSGI middleware
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
     '/metrics': make_wsgi_app()
 })

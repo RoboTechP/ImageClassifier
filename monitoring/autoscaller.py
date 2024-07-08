@@ -56,20 +56,6 @@ def calculate_replicas(requests_in_last_20s, current_replicas):
         return 2
     else:
         return current_replicas
-    """Calculate the desired number of replicas based on requests in the last 20 seconds"""
-    print(f"Requests in the last 20 seconds: {requests_in_last_20s}")
-    print(f"Current replicas: {current_replicas}")
-
-    if current_replicas == 1 and requests_in_last_20s > 20:
-        return 2
-    elif current_replicas == 2 and requests_in_last_20s > 120:
-        return 3
-    elif current_replicas == 3 and requests_in_last_20s > 300:
-        return 4
-    elif current_replicas > 1 and requests_in_last_20s < 40:
-        return 2
-    else:
-        return current_replicas
 
 def update_replicas(deployment_name, namespace, replicas):
     """Update the number of replicas in the Kubernetes deployment"""
