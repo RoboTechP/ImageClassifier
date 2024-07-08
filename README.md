@@ -60,7 +60,7 @@ Custom metrics are collected by Prometheus, which the monitoring component uses 
    ```
 
 6. Run the autoscaler  
- In the same virtual environment enabled terminal
+   In the same virtual environment enabled terminal
    ```sh
    cd monitoring
    python autoscaler.py
